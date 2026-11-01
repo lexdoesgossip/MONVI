@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monvi - Grabador de señas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    select { font: 600 18px 'Quicksand', sans-serif; padding: 10px 16px; border-radius: 999px; border: none; background: #fff; box-shadow: var(--sombra); color: var(--tinta); }
+    .fila { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    #conteo { display: flex; flex-direction: column; gap: 10px; } #conteo div { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; } #conteo b { font-family: Quicksand, sans-serif; min-width: 90px; }
+    #conteo span { background: var(--lilaC); border-radius: 999px; padding: 4px 14px; font-family: 'Quicksand', sans-serif; font-weight: 700; }
+    #conteo span.ok { background: var(--azulC); }
+    #pred { margin-top: 18px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 28px; padding: 16px; border-radius: 28px; background: var(--amarilloC); text-align: center; }
+    #predMov { margin-top: 8px; font-size: 16px; text-align: center; }
+    .nota { font-size: 14px; color: var(--suave); margin: 0; }
+  </style>
+</head>
+<body>
+  <header id="top"><div class="logo">Monvi <span style="font-size:16px;color:var(--suave)">grabador de señas</span></div></header>
+  <main class="pantalla">
+    <div class="cols">
+      <section class="camara">
+        <div class="wrap"><video id="video" autoplay playsinline muted></video><canvas id="canvas" width="640" height="480"></canvas></div>
+        <p id="estado"></p>
+        <div id="pred">Probando: ninguna mano</div>
+        <div id="predMov" class="nota">Movimiento: sin datos</div>
+      </section>
+      <section class="panel">
+        <div class="fila"><select id="tipo"><option value="pose">Pose fija</option><option value="mov">Con movimiento</option></select><select id="mano"><option value="D">Mano derecha</option><option value="I">Mano izquierda</option></select><select id="letra"></select><button id="grabar">Grabar 30 muestras</button></div>
+        <p class="nota">Graba todas las letras con una mano y luego repite con la otra. Pulsa grabar, tienes 3 segundos para acomodar la mano. Durante la captura mueve la mano un poco (más cerca, más lejos, ligeramente girada) para que aprenda variaciones.</p>
+        <div id="mensaje">Elige una letra</div>
+        <div id="barra"><div id="progreso"></div></div>
+        <div id="conteo"></div>
+        <div class="fila">
+          <button id="descargar" class="secundario">Descargar senas.json</button>
+          <button id="borrar" class="secundario">Borrar letra elegida</button>
+        </div>
+        <p class="nota">Para letras con movimiento (como J o Z) elige "Con movimiento": al grabar tienes 2 segundos para hacer la seña completa. Graba unas 8 repeticiones por mano.</p>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="js/grabar.js"></script>
+</body>
+</html>

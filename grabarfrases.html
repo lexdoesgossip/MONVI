@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monvi - Grabador de frases</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@600;700&family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    select { font: 600 18px 'Quicksand', sans-serif; padding: 10px 16px; border-radius: 999px; border: none; background: #fff; box-shadow: var(--sombra); color: var(--tinta); max-width: 100%; }
+    .fila { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    #conteo { display: flex; flex-direction: column; gap: 10px; max-height: 260px; overflow: auto; }
+    #conteo div { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    #conteo b { font-family: Quicksand, sans-serif; width: 100%; }
+    #conteo span { background: var(--lilaC); border-radius: 999px; padding: 3px 12px; font-size: 14px; font-family: 'Quicksand', sans-serif; font-weight: 700; }
+    #conteo span.ok { background: var(--azulC); }
+    #pred { margin-top: 18px; font-family: 'Quicksand', sans-serif; font-weight: 700; font-size: 24px; padding: 16px; border-radius: 28px; background: var(--amarilloC); text-align: center; }
+    .nota { font-size: 14px; color: var(--suave); margin: 0; }
+  </style>
+</head>
+<body>
+  <header id="top"><div class="logo">Monvi <span style="font-size:16px;color:var(--suave)">grabador de frases</span></div></header>
+  <main class="pantalla">
+    <div class="cols">
+      <section class="camara">
+        <div class="wrap"><video id="video" autoplay playsinline muted></video><canvas id="canvas" width="640" height="480"></canvas></div>
+        <p id="estado"></p>
+        <div id="pred">Probando: ninguna mano</div>
+      </section>
+      <section class="panel">
+        <div class="fila"><select id="frase"></select><button id="grabar">Grabar 1 repetición (3 s)</button></div>
+        <p class="nota">Siéntate siempre a la misma distancia de la cámara, con las manos y el rostro visibles. Haz la frase completa, a ritmo natural, y graba unas 8 repeticiones. Si la frase se hace con una sola mano, graba unas con cada mano.</p>
+        <div id="mensaje">Elige una frase</div>
+        <div id="barra"><div id="progreso"></div></div>
+        <div id="conteo"></div>
+        <div class="fila">
+          <button id="calibrar" class="secundario">Calibrar límite</button>
+          <button id="descargar" class="secundario">Descargar frases.json</button>
+          <button id="borrar" class="secundario">Borrar frase elegida</button>
+        </div>
+        <p id="info" class="nota"></p>
+      </section>
+    </div>
+  </main>
+  <script type="module" src="js/grabar-frases.js"></script>
+</body>
+</html>
