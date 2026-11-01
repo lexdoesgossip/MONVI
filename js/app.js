@@ -250,7 +250,12 @@ function evaluarLetra(letra, p, buf) {
 // ---------- Progreso guardado (racha incluida) ----------
 let guardado = { xp: 0, hechos: [], racha: 0, ultimoDia: "" };
 try { guardado = { ...guardado, ...JSON.parse(localStorage.getItem("lsm-progreso")) }; } catch (e) {}
-const guardar = () => { try { localStorage.setItem("lsm-progreso", JSON.stringify(guardado)); } catch (e) {} };
+const guardar = () => {
+  try { localStorage.setItem("lsm-progreso", JSON.stringify(guardado)); }
+  catch (e) { aviso("Este navegador no deja guardar tu progreso (¿ventana privada o datos bloqueados?). Abre Monvi en una ventana normal."); }
+};
+navigator.storage?.persist?.(); // pide al navegador que no borre el progreso por falta de espacio
+guardar();                      // prueba al abrir: si no se puede guardar, avisa
 const fecha = (ms) => new Date(ms).toLocaleDateString("en-CA");
 
 function actualizarRacha() {
@@ -340,10 +345,17 @@ const COSTO_VIDEO = 5;
 const nombreVideo = (c) => c.replace(/Ñ/g, "enie"); // Ñ -> assets/videos/enie.mp4
 const videosFallidos = new Set();
 const pintarXp = () => { $("xpLeccion").textContent = xpSesion; };
+// El XP se guarda en cuanto cambia (no al final de la lección), así no se pierde si cierras la página.
+function cambiarXp(n) {
+  const antes = xpSesion;
+  xpSesion = Math.max(0, xpSesion + n); pintarXp();
+  if (nivelActual.libre) return;
+  guardado.xp = Math.max(0, guardado.xp + (xpSesion - antes)); guardar();
+}
 
 function abrirVideo(cobrar) {
   const it = items[indice];
-  if (cobrar && !nivelActual.libre) { xpSesion = Math.max(0, xpSesion - COSTO_VIDEO); pintarXp(); }
+  if (cobrar && !nivelActual.libre) cambiarXp(-COSTO_VIDEO);
   const src = it.tipo === "frase" ? `assets/videos/frases/${it.clave}.mp4` : `assets/videos/${nombreVideo(it.clave)}.mp4`;
   $("tituloEjemplo").textContent = it.tipo === "frase" ? `Así se hace: ${FRASES[it.clave]}` : `Así se hace la letra ${it.clave}`;
   const falla = videosFallidos.has(src);
@@ -394,7 +406,8 @@ $("reintentar").onclick = () => { $("final").classList.add("oculto"); empezarNiv
 $("confirmar").onclick = () => { if (!enPausa && !terminado) itemCompletado(); };
 
 function itemCompletado() {
-  xpSesion += XP_POR_ITEM; pintarXp();
+  if (!nivelActual.libre) actualizarRacha();
+  cambiarXp(XP_POR_ITEM);
   enPausa = true;
   $("progresoNivel").style.width = ((indice + 1) / items.length * 100) + "%";
   $("mensaje").textContent = `¡Muy bien! +${XP_POR_ITEM} XP`;
@@ -424,7 +437,6 @@ function terminarNivel(gano) {
     $("finalTexto").textContent = "Escribe otro mensaje cuando quieras practicar más.";
     confeti();
   } else if (gano) {
-    guardado.xp += xpSesion;
     if (!guardado.hechos.includes(nivelActual.id)) guardado.hechos.push(nivelActual.id);
     actualizarRacha(); guardar();
     $("finalTitulo").textContent = "¡Lección completada!";
