@@ -18,6 +18,7 @@
       <symbol id="m5" viewBox="0 0 100 100"><path d="M46 22Q50 6 60 12" stroke="currentColor" stroke-width="6" fill="none" stroke-linecap="round"/><circle cx="50" cy="54" r="35" fill="currentColor"/><circle cx="29" cy="62" r="5" fill="#ff8fb8" opacity=".5"/><circle cx="71" cy="62" r="5" fill="#ff8fb8" opacity=".5"/><circle cx="38" cy="48" r="4.5" fill="#3a2f66" class="ojo"/><circle cx="62" cy="48" r="4.5" fill="#3a2f66" class="ojo"/><ellipse cx="50" cy="66" rx="19" ry="11" fill="#ffb36b"/><circle cx="44" cy="64" r="1.6" fill="#3a2f66"/><circle cx="56" cy="64" r="1.6" fill="#3a2f66"/><path d="M38 69Q50 74 62 69" stroke="#c9742a" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
       <symbol id="m6" viewBox="0 0 100 100"><ellipse cx="50" cy="54" rx="35" ry="31" fill="currentColor"/><path d="M30 26Q36 18 42 25M54 24Q62 16 68 26" stroke="currentColor" stroke-width="7" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="56" rx="27" ry="22" fill="#fff" opacity=".78"/><ellipse cx="37" cy="52" rx="8" ry="5.5" fill="#3a2f66" opacity=".85" transform="rotate(22 37 52)"/><ellipse cx="63" cy="52" rx="8" ry="5.5" fill="#3a2f66" opacity=".85" transform="rotate(-22 63 52)"/><circle cx="37" cy="52" r="2.8" fill="#fff" class="ojo"/><circle cx="63" cy="52" r="2.8" fill="#fff" class="ojo"/><ellipse cx="50" cy="62" rx="4.5" ry="3.2" fill="#3a2f66"/><path d="M41 68Q50 75 59 68" stroke="#3a2f66" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="m7" viewBox="0 0 100 100"><circle cx="18" cy="54" r="13" fill="currentColor"/><circle cx="82" cy="54" r="13" fill="currentColor"/><circle cx="18" cy="54" r="6" fill="#fff" opacity=".55"/><circle cx="82" cy="54" r="6" fill="#fff" opacity=".55"/><circle cx="50" cy="52" r="35" fill="currentColor"/><ellipse cx="50" cy="64" rx="23" ry="18" fill="#fff" opacity=".85"/><circle cx="39" cy="48" r="4.5" fill="#3a2f66" class="ojo"/><circle cx="61" cy="48" r="4.5" fill="#3a2f66" class="ojo"/><circle cx="45" cy="62" r="1.8" fill="#3a2f66"/><circle cx="55" cy="62" r="1.8" fill="#3a2f66"/><path d="M42 70Q50 77 58 70" stroke="#3a2f66" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
+      <symbol id="m7feliz" viewBox="0 0 100 100"><circle cx="18" cy="54" r="13" fill="currentColor"/><circle cx="82" cy="54" r="13" fill="currentColor"/><circle cx="18" cy="54" r="6" fill="#fff" opacity=".55"/><circle cx="82" cy="54" r="6" fill="#fff" opacity=".55"/><circle cx="50" cy="52" r="35" fill="currentColor"/><ellipse cx="50" cy="64" rx="23" ry="18" fill="#fff" opacity=".85"/><circle cx="31" cy="62" r="4" fill="#ff8fb8" opacity=".5"/><circle cx="69" cy="62" r="4" fill="#ff8fb8" opacity=".5"/><path d="M32 51L39 43L46 51M54 51L61 43L68 51" stroke="#3a2f66" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="45" cy="60" r="1.8" fill="#3a2f66"/><circle cx="55" cy="60" r="1.8" fill="#3a2f66"/><path d="M39 65Q50 66 61 65Q59 79 50 79Q41 79 39 65Z" fill="#3a2f66" stroke="#3a2f66" stroke-width="2" stroke-linejoin="round"/><ellipse cx="50" cy="75.5" rx="4.5" ry="2.6" fill="#ff8fb8"/></symbol>
       <symbol id="estrella" viewBox="0 0 24 24"><path d="M12 0C13 7 17 11 24 12C17 13 13 17 12 24C11 17 7 13 0 12C7 11 11 7 12 0Z" fill="currentColor"/></symbol>
       <symbol id="corazon" viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.6 4.6 0 0 1 8-3 4.6 4.6 0 0 1 8 3c0 5.8-8 11-8 11z" fill="currentColor"/></symbol>
     </defs>
@@ -38,9 +39,10 @@
   <main id="inicio" class="pantalla">
     <section class="hero">
       <div class="heroTexto">
+        <p id="saludo" class="saludo oculto"></p>
         <h1>Aprende lengua de señas mexicana con tus propias manos</h1>
-        <p>Practica frente a tu cámara y Monvi te dice al instante qué ajustar.</p>
-        <a href="#mapa" class="boton">Ver niveles <span class="flecha">&rarr;</span></a>
+        <p>Ponte frente a la cámara, haz la seña y Monvi te dice qué ajustar. Sin presión: te puedes equivocar las veces que quieras.</p>
+        <a href="#mapa" class="boton">Vamos a los niveles <span class="flecha">&rarr;</span></a>
       </div>
       <div class="heroArte">
         <svg class="h1" style="color:#a9d2ff"><use href="#m3"/></svg>
@@ -54,13 +56,14 @@
       <div class="libreTexto">
         <svg class="libreMono" style="color:#ffb3d1"><use href="#m7"/></svg>
         <h2>Práctica libre</h2>
-        <p>Escribe lo que quieras decir y Monvi lo convierte en letras y frases para que lo practiques.</p>
-        <div class="campo"><input id="textoLibre" type="text" maxlength="80" placeholder="Ej: Hola, mi nombre es Ana" aria-label="Texto para practicar"><button id="practicar">Practicar</button></div>
+        <p>Escribe lo que quieras (tu nombre, un apodo, lo que se te ocurra) y Monvi te lo pone en letras para que lo deletrees.</p>
+        <div class="campo"><input id="textoLibre" type="text" maxlength="80" placeholder="Ej: Ana, o lo que quieras" aria-label="Texto para practicar"><button id="practicar">Practicar</button></div>
       </div>
     </section>
-    <h2 class="seccion">Tu camino</h2>
+    <h2 class="seccion">Tu camino, a tu ritmo</h2>
     <div id="mapa"></div>
     <div class="herramientas">
+      <button id="cambiarNombre" class="secundario">Poner mi nombre</button>
       <button id="demo" class="secundario">Modo demo</button>
       <button id="reiniciar" class="secundario">Reiniciar progreso</button>
     </div>
@@ -84,7 +87,7 @@
       </section>
       <section class="panel">
         <div id="objetivo" class="objetivo"></div>
-        <button id="verEjemplo" class="secundario">Repetir video (-5 XP)</button>
+        <button id="verEjemplo" class="secundario">Ver el video otra vez (-5 XP)</button>
         <div id="mensaje">Muestra tu mano a la cámara</div>
         <div id="barra"><div id="progreso"></div></div>
         <button id="confirmar" class="oculto">Ya la hice</button>
@@ -93,21 +96,32 @@
     </div>
   </main>
 
+  <div id="nombreCapa" class="capa oculto">
+    <div class="tarjeta">
+      <svg class="mascotaFinal" style="color:#ffb3d1"><use href="#m7"/></svg>
+      <h2>¿Cómo te llamas?</h2>
+      <p>Vamos a aprender a deletrear tu nombre con señas.</p>
+      <div class="campo"><input id="inputNombre" type="text" maxlength="14" placeholder="Tu nombre" autocomplete="off" aria-label="Tu nombre"><button id="guardarNombre">Listo</button></div>
+      <p id="errorNombre" class="oculto">Escribe al menos 2 letras (sin números ni símbolos).</p>
+      <button id="cancelarNombre" class="secundario">Ahora no</button>
+    </div>
+  </div>
+
   <div id="ejemplo" class="capa oculto">
     <div class="tarjeta">
       <h2 id="tituloEjemplo">Así se hace</h2>
       <video id="videoEjemplo" loop muted playsinline></video>
-      <p id="sinVideo" class="oculto">Video no disponible todavía</p>
+      <p id="sinVideo" class="oculto">Todavía no tenemos el video de esta seña</p>
       <button id="empezar">¡Listo, a practicar!</button>
     </div>
   </div>
 
   <div id="final" class="capa oculto">
     <div class="tarjeta">
-      <svg class="mascotaFinal" style="color:#ffb3d1"><use href="#m7"/></svg>
+      <svg class="mascotaFinal" style="color:#ffb3d1"><use id="usoFinal" href="#m7"/></svg>
       <h2 id="finalTitulo"></h2>
       <p id="finalTexto"></p>
-      <button id="reintentar" class="oculto">Intentar de nuevo</button>
+      <button id="reintentar" class="oculto">Otra vez</button>
       <button id="volver">Volver al inicio</button>
     </div>
   </div>
