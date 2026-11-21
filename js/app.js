@@ -97,8 +97,10 @@ const aceptadasF = (id) => [id, ...(ACEPTAN_FRASES[id] || [])];
 const FRASES = TEXTO;
 
 // ---------- Frases (frases.json, grabadas con grabar-frases.html) ----------
+// Las frases están apagadas por ahora. Para volver a activarlas: USAR_FRASES = true
+const USAR_FRASES = false;
 let datosF = {};
-try { datosF = await (await fetch("frases.json")).json(); } catch (e) {}
+if (USAR_FRASES) { try { datosF = await (await fetch("frases.json")).json(); } catch (e) {} }
 const MIN_REPS_FRASE = 5, DURF = 3000, NF = 30, NEVAL = 300;
 const MARGEN = 0.85;      // la frase pedida debe quedar al menos 15% más cerca que cualquier otra
 const PASES = 3, DE = 5;  // hacen falta 3 aciertos en las últimas 5 revisiones (~1.5 s)
@@ -187,19 +189,26 @@ const NIVELES = [
   { id: 1, titulo: "Vocales", sub: "A, E, I, O, U", letras: ["A", "E", "I", "O", "U"] },
   { id: 2, titulo: "Práctica de vocales", sub: "En orden aleatorio", letras: ["A", "E", "I", "O", "U"], mezclar: true },
   { id: 3, titulo: "Abecedario 1", sub: "B, C, D, F", letras: ["B", "C", "D", "F"], repaso: 3 },
+  { id: 31, titulo: "Práctica 1", sub: "B, C, D, F y repaso", practica: { nuevas: ["B", "C", "D", "F"], antes: ["A", "E", "I", "O", "U"] } },
   { id: 4, titulo: "Abecedario 2", sub: "G, H, J, K", letras: ["G", "H", "J", "K"], repaso: 3 },
+  { id: 32, titulo: "Práctica 2", sub: "G, H, J, K y repaso", practica: { nuevas: ["G", "H", "J", "K"], antes: [...["A", "E", "I", "O", "U"], ...["B", "C", "D", "F"]] } },
   { id: 5, titulo: "Abecedario 3", sub: "L, LL, M, N", letras: ["L", "LL", "M", "N"], repaso: 3 },
+  { id: 33, titulo: "Práctica 3", sub: "L, LL, M, N y repaso", practica: { nuevas: ["L", "LL", "M", "N"], antes: [...["A", "E", "I", "O", "U"], ...["B", "C", "D", "F"], ...["G", "H", "J", "K"]] } },
   { id: 6, titulo: "Abecedario 4", sub: "Ñ, P, Q, R", letras: ["Ñ", "P", "Q", "R"], repaso: 3 },
+  { id: 34, titulo: "Práctica 4", sub: "Ñ, P, Q, R y repaso", practica: { nuevas: ["Ñ", "P", "Q", "R"], antes: [...["A", "E", "I", "O", "U"], ...["B", "C", "D", "F"], ...["G", "H", "J", "K"], ...["L", "LL", "M", "N"]] } },
   { id: 7, titulo: "Abecedario 5", sub: "RR, S, T, V", letras: ["RR", "S", "T", "V"], repaso: 3 },
+  { id: 35, titulo: "Práctica 5", sub: "RR, S, T, V y repaso", practica: { nuevas: ["RR", "S", "T", "V"], antes: [...["A", "E", "I", "O", "U"], ...["B", "C", "D", "F"], ...["G", "H", "J", "K"], ...["L", "LL", "M", "N"], ...["Ñ", "P", "Q", "R"]] } },
   { id: 8, titulo: "Abecedario 6", sub: "W, X, Y, Z", letras: ["W", "X", "Y", "Z"], repaso: 3 },
+  { id: 36, titulo: "Práctica 6", sub: "W, X, Y, Z y repaso", practica: { nuevas: ["W", "X", "Y", "Z"], antes: [...["A", "E", "I", "O", "U"], ...["B", "C", "D", "F"], ...["G", "H", "J", "K"], ...["L", "LL", "M", "N"], ...["Ñ", "P", "Q", "R"], ...["RR", "S", "T", "V"]] } },
   { id: 21, titulo: "Repaso 1", sub: "B, C, D, F, G, H", letras: ["B", "C", "D", "F", "G", "H"], mezclar: true },
   { id: 22, titulo: "Repaso 2", sub: "J, K, L, LL, M, N", letras: ["J", "K", "L", "LL", "M", "N"], mezclar: true },
   { id: 23, titulo: "Repaso 3", sub: "Ñ, P, Q, R, RR, S", letras: ["Ñ", "P", "Q", "R", "RR", "S"], mezclar: true },
   { id: 24, titulo: "Repaso 4", sub: "T, V, W, X, Y, Z", letras: ["T", "V", "W", "X", "Y", "Z"], mezclar: true },
   { id: 25, titulo: "Repaso general", sub: "12 letras al azar", cuantas: 12,
     pool: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "LL", "M", "N", "Ñ", "O", "P", "Q", "R", "RR", "S", "T", "U", "V", "W", "X", "Y", "Z"] },
+  { id: 40, titulo: "Tu nombre", sub: "Deletrea tu nombre", nombre: true },
   { id: 9, titulo: "Mini examen", sub: "Deletrea palabras", palabras: ["GATO", "ANA", "PIÑA", "CARRO"] },
-  ...GRUPOS.map((g, i) => ({ id: 10 + i, titulo: "Frases: " + g.titulo, sub: g.sub, frases: g.frases.map((f) => f[0]) }))
+  ...(USAR_FRASES ? GRUPOS.map((g, i) => ({ id: 10 + i, titulo: "Frases: " + g.titulo, sub: g.sub, frases: g.frases.map((f) => f[0]) })) : [])
 ];
 
 // ---------- Evaluación de una letra con tus grabaciones ----------
@@ -278,6 +287,9 @@ function pintarInicio() {
   $("leccion").classList.add("oculto");
   $("xpTotal").textContent = guardado.xp;
   $("racha").textContent = rachaVisible();
+  $("saludo").textContent = guardado.nombre ? `¡Qué onda, ${bonito(guardado.nombre)}!` : "";
+  $("saludo").classList.toggle("oculto", !guardado.nombre);
+  $("cambiarNombre").textContent = guardado.nombre ? "Cambiar mi nombre" : "Poner mi nombre";
 
   const mapa = $("mapa");
   mapa.innerHTML = "";
@@ -287,16 +299,17 @@ function pintarInicio() {
     const abierto = guardado.demo || i === 0 || guardado.hechos.includes(NIVELES[i - 1].id);
     const b = document.createElement("button");
     b.className = "nivel " + (hecho ? "hecho" : abierto ? "abierto" : "bloqueado");
-    b.innerHTML = `<svg class="mascota${i % 7 === 6 ? " mono" : ""}"><use href="#m${i % 7 + 1}"/></svg><span class="num">Nivel ${i + 1}</span><span class="tit">${n.titulo}</span><small>${n.sub}</small><span class="estado">${hecho ? "Completado" : abierto ? "Empezar" : "Bloqueado"}</span>`;
-    b.style.animationDelay = `${i * 70}ms`;
-    if (abierto) b.onclick = () => empezarNivel(n);
+    b.innerHTML = `<svg class="mascota${i % 7 === 6 ? " mono" : ""}"><use href="#m${i % 7 + 1}"/></svg><span class="num">Nivel ${i + 1}</span><span class="tit">${n.titulo}</span><small>${n.nombre && guardado.nombre ? "Deletrea: " + bonito(guardado.nombre) : n.sub}</small><span class="estado">${hecho ? "Completado" : abierto ? "Empezar" : "Bloqueado"}</span>`;
+    b.classList.add("entrando"); b.style.animationDelay = `${i * 70}ms`;
+    b.addEventListener("animationend", (e) => { if (e.target === b) { b.classList.remove("entrando"); b.style.animationDelay = ""; } });
+    if (abierto) b.onclick = () => (n.nombre && !guardado.nombre ? pedirNombre(() => empezarNivel(n)) : empezarNivel(n));
     mapa.appendChild(b);
   });
 }
 
 $("demo").onclick = () => { guardado.demo = !guardado.demo; guardar(); pintarInicio(); };
 $("reiniciar").onclick = () => {
-  if (!confirm("¿Borrar XP, racha y niveles completados de este navegador?")) return;
+  if (!confirm("¿Borrar XP, racha, nombre y niveles completados de este navegador?")) return;
   guardado = { xp: 0, hechos: [], racha: 0, ultimoDia: "", demo: guardado.demo }; guardar(); pintarInicio();
 };
 
@@ -307,6 +320,8 @@ let inicioOk = null, enPausa = false, terminado = false, buf = [], bufF = [], ul
 
 function armarItems(n) {
   if (n.items) return n.items;
+  if (n.practica) return mezclar([...n.practica.nuevas, ...n.practica.nuevas, ...mezclar(n.practica.antes).slice(0, 3)]).map((l) => ({ tipo: "letra", clave: l, nueva: false }));
+  if (n.nombre) { const w = guardado.nombre || "ANA"; const fase = (examen) => [...w].map((l, pos) => ({ tipo: "letra", clave: l, palabra: w, pos, examen, nombre: true })); return [...fase(false), ...fase(true)]; }
   if (n.palabras) return n.palabras.flatMap((w) => [...w].map((l, pos) => ({ tipo: "letra", clave: l, palabra: w, pos })));
   if (n.frases) return n.frases.map((c) => ({ tipo: "frase", clave: c }));
   if (n.pool) return mezclar(n.pool).slice(0, n.cuantas || 10).map((l) => ({ tipo: "letra", clave: l, nueva: false }));
@@ -382,8 +397,9 @@ function mostrarItem() {
   const it = items[indice], o = $("objetivo");
   $("progresoNivel").style.width = (indice / items.length * 100) + "%";
   if (it.palabra) {
-    o.innerHTML = `<div class="sub">Deletrea la palabra</div><div class="palabra">${[...it.palabra].map((l, i) =>
-      `<span class="${i === it.pos ? "act" : i < it.pos ? "ya" : ""}">${l}</span>`).join("")}</div>`;
+    const sub = it.nombre ? (it.examen ? "Mini examen: deletrea tu nombre sin pistas" : "Aprende a deletrear tu nombre") : "Deletrea la palabra";
+    o.innerHTML = `<div class="sub">${sub}</div><div class="palabra">${[...it.palabra].map((l, i) =>
+      `<span class="${i === it.pos ? "act" : i < it.pos ? "ya" : ""}">${it.examen && i >= it.pos ? (i === it.pos ? "?" : "_") : l}</span>`).join("")}</div>`;
   } else if (it.tipo === "frase") {
     o.innerHTML = `<div class="sub">Practica esta frase</div><div class="frase">${FRASES[it.clave]}</div>`;
   } else {
@@ -394,6 +410,7 @@ function mostrarItem() {
   $("barra").classList.toggle("oculto", it.tipo === "frase" && !frasePorCamara(it.clave));
   $("mensaje").className = "";
   $("mensaje").textContent = it.tipo === "frase" ? (frasePorCamara(it.clave) ? "Mira el video y haz la frase frente a la cámara." : "Mira el video, repítela frente a la cámara y confirma.") : "Muestra tu mano a la cámara";
+  if (it.examen && it.pos === 0) $("mensaje").textContent = "¡Ahora el mini examen! Deletrea tu nombre, esta vez sin pistas.";
   inicioOk = null; $("progreso").style.width = "0%";
   inicioItem = performance.now();
   buf = []; bufF = []; pases = []; ultimoR = null;
@@ -410,7 +427,7 @@ function itemCompletado() {
   cambiarXp(XP_POR_ITEM);
   enPausa = true;
   $("progresoNivel").style.width = ((indice + 1) / items.length * 100) + "%";
-  $("mensaje").textContent = `¡Muy bien! +${XP_POR_ITEM} XP`;
+  $("mensaje").textContent = `¡Eso! +${XP_POR_ITEM} XP`;
   $("mensaje").className = "ok";
   const mi = sesion;
   setTimeout(() => {
@@ -425,26 +442,28 @@ function itemCompletado() {
 function perderVida() {
   vidas--; pintarVidas();
   if (vidas <= 0) { terminarNivel(false); return; }
-  $("mensaje").textContent = "Se acabó el tiempo. ¡Inténtalo otra vez!";
+  $("mensaje").textContent = "Uy, se acabó el tiempo. ¡Otra vez, tú puedes!";
   $("mensaje").className = "mal";
   inicioItem = performance.now(); inicioOk = null; $("progreso").style.width = "0%";
 }
 
 function terminarNivel(gano) {
   terminado = true;
+  $("usoFinal").setAttribute("href", gano ? "#m7feliz" : "#m7");
   if (gano && nivelActual.libre) {
     $("finalTitulo").textContent = "¡Lo lograste!";
-    $("finalTexto").textContent = "Escribe otro mensaje cuando quieras practicar más.";
+    $("finalTexto").textContent = "Escribe otra cosa y seguimos practicando.";
     confeti();
   } else if (gano) {
     if (!guardado.hechos.includes(nivelActual.id)) guardado.hechos.push(nivelActual.id);
     actualizarRacha(); guardar();
-    $("finalTitulo").textContent = "¡Lección completada!";
-    $("finalTexto").textContent = `Ganaste ${xpSesion} XP. Racha: ${guardado.racha} día(s).`;
+    $("finalTitulo").textContent = "¡Lo lograste!";
+    $("finalTexto").textContent = `+${xpSesion} XP, y ya llevas ${guardado.racha} día(s) seguidos. ¡Bien ahí!`;
+    if (nivelActual.nombre) $("finalTitulo").textContent = `¡Listo, ${bonito(guardado.nombre)}!`;
     confeti();
   } else {
-    $("finalTitulo").textContent = "Te quedaste sin vidas";
-    $("finalTexto").textContent = "No pasa nada, repasa el ejemplo e inténtalo de nuevo.";
+    $("finalTitulo").textContent = "Ay, se acabaron las vidas";
+    $("finalTexto").textContent = "Pasa, a todos nos pasa. Échale otro vistazo al ejemplo y vuelve a intentarlo.";
   }
   $("reintentar").classList.toggle("oculto", gano);
   $("final").classList.remove("oculto");
@@ -479,6 +498,24 @@ function confeti() {
   })();
 }
 
+// ---------- Nombre del usuario ----------
+function bonito(n) { return n ? n[0] + n.slice(1).toLowerCase() : ""; }
+function limpiarNombre(t) { return norm(t).replace(/\s/g, "").toUpperCase().slice(0, 12); }
+function pedirNombre(alTerminar) {
+  const cap = $("nombreCapa"), inp = $("inputNombre");
+  $("errorNombre").classList.add("oculto"); inp.value = bonito(guardado.nombre || "");
+  cap.classList.remove("oculto"); inp.focus();
+  const ok = () => {
+    const n = limpiarNombre(inp.value);
+    if (n.length < 2) { $("errorNombre").classList.remove("oculto"); return; }
+    guardado.nombre = n; guardar(); cap.classList.add("oculto"); pintarInicio(); if (alTerminar) alTerminar();
+  };
+  $("guardarNombre").onclick = ok;
+  inp.onkeydown = (e) => { if (e.key === "Enter") ok(); };
+  $("cancelarNombre").onclick = () => cap.classList.add("oculto");
+}
+$("cambiarNombre").onclick = () => pedirNombre();
+
 // ---------- Práctica libre: texto a señas ----------
 const norm = (t) => t.toLowerCase().replace(/ñ/g, "\u0001").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   .replace(/\u0001/g, "ñ").replace(/[^a-zñ\s]/g, " ").replace(/\s+/g, " ").trim();
@@ -492,7 +529,7 @@ function textoAItems(texto) {
   for (let i = 0; i < palabras.length && out.length < 40;) {
     let hecho = false;
     for (let j = Math.min(palabras.length, i + 5); j > i; j--) {
-      const id = INDICE_FRASES[palabras.slice(i, j).join(" ")];
+      const id = USAR_FRASES && INDICE_FRASES[palabras.slice(i, j).join(" ")];
       if (id) { out.push({ tipo: "frase", clave: id }); i = j; hecho = true; break; }
     }
     if (hecho) continue;
